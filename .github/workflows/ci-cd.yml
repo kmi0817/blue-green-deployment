@@ -37,6 +37,11 @@ jobs:
         run: |
           ssh-keygen -l -f ~/.ssh/id_rsa || echo "키 잘못됨"
 
+      - name: Generate public key (safe)
+        run: |
+          ssh-keygen -y -f ~/.ssh/id_rsa > pubkey.txt || echo "키 손상됨"
+          head -n 1 pubkey.txt
+
       - name: Deploy to EC2
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'bash -s' <<EOF
